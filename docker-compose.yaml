@@ -1,0 +1,62 @@
+version: '3'
+
+services:
+  json:
+    build:
+      context: .
+      dockerfile: ./benchmarker.dockerfile
+    expose:
+      - "2001/udp"
+    environment:
+      FORMAT: "JSON"
+      PORT: 2001
+
+  xml:
+    build:
+      context: .
+      dockerfile: ./benchmarker.dockerfile
+    expose:
+      - "2002/udp"
+    environment:
+      FORMAT: "XML"
+      PORT: 2002
+
+  msgpack:
+    build:
+      context: .
+      dockerfile: ./benchmarker.dockerfile
+    expose:
+      - "2003"
+    environment:
+      FORMAT: "MSGPACK"
+      PORT: 2003
+
+  yaml:
+    build:
+      context: .
+      dockerfile: ./benchmarker.dockerfile
+    expose:
+      - "2004"
+    environment:
+      FORMAT: "YAML"
+      PORT: 2004
+
+  proxy:
+    build:
+      context: .
+      dockerfile: ./proxy.dockerfile
+    expose:
+      - "2000/udp"
+    ports:
+      - "2000:2000/udp"
+    environment:
+      PORT: 2000
+      JSON_PORT: 2001
+      XML_PORT: 2002
+      MSGPACK_PORT: 2003
+      YAML_PORT: 2004
+    depends_on:
+      - json
+      - xml
+      - msgpack
+      - yaml
