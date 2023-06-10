@@ -5,41 +5,51 @@ services:
     build:
       context: .
       dockerfile: ./benchmarker.dockerfile
-    expose:
-      - "2001/udp"
     environment:
       FORMAT: "JSON"
       PORT: 2001
+      MULTICAST_HOST: "224.0.0.1"
+      MULTICAST_PORT: 2023
 
   xml:
     build:
       context: .
       dockerfile: ./benchmarker.dockerfile
-    expose:
-      - "2002/udp"
     environment:
       FORMAT: "XML"
       PORT: 2002
+      MULTICAST_HOST: "224.0.0.1"
+      MULTICAST_PORT: 2023
 
   msgpack:
     build:
       context: .
       dockerfile: ./benchmarker.dockerfile
-    expose:
-      - "2003"
     environment:
       FORMAT: "MSGPACK"
       PORT: 2003
+      MULTICAST_HOST: "224.0.0.1"
+      MULTICAST_PORT: 2023
 
   yaml:
     build:
       context: .
       dockerfile: ./benchmarker.dockerfile
-    expose:
-      - "2004"
     environment:
       FORMAT: "YAML"
       PORT: 2004
+      MULTICAST_HOST: "224.0.0.1"
+      MULTICAST_PORT: 2023
+
+  native:
+    build:
+      context: .
+      dockerfile: ./benchmarker.dockerfile
+    environment:
+      FORMAT: "NATIVE"
+      PORT: 2005
+      MULTICAST_HOST: "224.0.0.1"
+      MULTICAST_PORT: 2023
 
   proxy:
     build:
@@ -55,8 +65,12 @@ services:
       XML_PORT: 2002
       MSGPACK_PORT: 2003
       YAML_PORT: 2004
+      NATIVE_PORT: 2005
+      MULTICAST_HOST: "224.0.0.1"
+      MULTICAST_PORT: 2023
     depends_on:
       - json
       - xml
       - msgpack
       - yaml
+      - native

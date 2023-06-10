@@ -7,7 +7,7 @@ import logging as log
 log.basicConfig(level=log.INFO)
 
 DEFAULT_FORMAT = "JSON"
-HOST = 'localhost'
+HOST = '127.0.0.1'
 DEFAULT_PORT = 2001
 TEST_NUMBER = 10000
 
@@ -42,7 +42,15 @@ if FORMAT not in test_functions:
 PORT = int(os.getenv("PORT", DEFAULT_PORT))
 HOST = FORMAT.lower()
 
+multicast_host = os.getenv("MULTICAST_HOST")
+multicast_port = os.getenv("MULTICAST_PORT")
+
 net = UdpNetwork()
 net.add_socket(HOST, PORT)
 log.info(f"Benchmarker {FORMAT}. Listening to {HOST}:{PORT}")
+
+if multicast_host is not None and multicast_port is not None:
+    net.add_socket(multicast_host, int(multicast_port), 'multicast')
+    log.info(f"Benchmarker {FORMAT}. Listening to {multicast_host}:{multicast_port}")
+
 net.run(handle_request)
